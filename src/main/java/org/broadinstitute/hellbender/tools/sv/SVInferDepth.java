@@ -193,10 +193,11 @@ public class SVInferDepth extends GATKTool {
         final String contig = tokens[0];
         final int start = Integer.parseInt(tokens[1]);
         final int end = start + Integer.parseInt(tokens[2]);
-        final double pHWLoss = Double.parseDouble(tokens[4]);
-        final double pHWGain = Double.parseDouble(tokens[5]);
-        final double eps = Double.parseDouble(tokens[6]);
-        final double phiBin = Double.parseDouble(tokens[6]);
+        final String[] stateProbStringArray = tokens[3].split(FIRST_DIM_SEPARATOR);
+        final double eps = Double.parseDouble(tokens[4]);
+        final double phiBin = Double.parseDouble(tokens[5]);
+        final double pHWLoss = Double.parseDouble(tokens[6]);
+        final double pHWGain = Double.parseDouble(tokens[7]);
         final String id = String.join("_", Arrays.asList(contig, String.valueOf(start), String.valueOf(end)));
 
         final VariantContextBuilder builder = new VariantContextBuilder("", contig, start, end, Arrays.asList(Allele.REF_N, Allele.SV_SIMPLE_CNV));
@@ -206,7 +207,6 @@ public class SVInferDepth extends GATKTool {
         builder.attribute(GATKSVVCFConstants.DEPTH_BACKGROUND_FIELD, eps);
         builder.attribute(GATKSVVCFConstants.DEPTH_MEAN_BIAS_FIELD, phiBin);
 
-        final String[] stateProbStringArray = tokens[3].split(FIRST_DIM_SEPARATOR);
         if (stateProbStringArray.length != sampleList.size()) {
             throw new UserException.BadInput("Encountered line with " + stateProbStringArray.length + " sample state posteriors but the sample list is of length " + sampleList.size());
         }

@@ -115,7 +115,8 @@ class SVDepthPyroModel(object):
             z = pyro.sample('z', dist.Categorical(z_dist))
 
             # N x S
-            mu_counts = bin_size.unsqueeze(-1) * phi_sample * sample_depth * Vindex(locs)[..., z] / self.read_length
+            # TODO add in * phi_sample
+            mu_counts = bin_size.unsqueeze(-1) * sample_depth * Vindex(locs)[..., z] / self.read_length
 
             pyro.sample('obs', dist.Poisson(rate=mu_counts), obs=counts)
 
